@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    char name[50];
+    float price;
+} FoodItem;
+
+
+typedef struct {
+    char customerName[50];
+    FoodItem items[10];
+    int numItems;
+    float totalCost;
+} Order;
+
+
+void displayMenu() {
+    printf("Menu:\n");
+    printf("1. Pizza - 180\n");
+    printf("2. Burger - 139\n");
+    printf("3. Sandwich - 120\n");
+    printf("4. French frie - 90\n");
+}
+
+
+void takeOrder(Order *order) {
+    printf("Enter customer name: ");
+    scanf("%s", order->customerName);
+
+    order->numItems = 0;
+    order->totalCost = 0;
+
+    int choice;
+    do {
+        displayMenu();
+        printf("Enter choice (0 to finish): ");
+        scanf("%d", &choice);
+
+        if (choice >= 1 && choice <= 4) {
+            strcpy(order->items[order->numItems].name, (choice == 1) ? "Pizza" : (choice == 2) ? "Burger" : (choice == 3) ? "Sandwich" : "French frie");
+            order->items[order->numItems].price = (choice == 1) ? 180 : (choice == 2) ?139 : (choice == 3) ? 120 : 90;
+            order->numItems++;
+            order->totalCost += order->items[order->numItems - 1].price;
+        }
+    } while (choice != 0);
+}
+void displayOrder(Order *order) {
+    printf("Order Summary:\n");
+    printf("Customer Name: %s\n", order->customerName);
+    printf("Items:\n");
+    for (int i = 0; i < order->numItems; i++) {
+        printf("%s - %.2f\n", order->items[i].name, order->items[i].price);
+    }
+    printf("Total Cost: %.2f\n", order->totalCost);
+}
+
+int main() {
+    Order order;
+    takeOrder(&order);
+    displayOrder(&order);
+    return 0;
+}
